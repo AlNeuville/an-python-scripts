@@ -10,7 +10,8 @@ This program manages a list of scripts. It can execute the scripts and show
 their outputs.
 Options:
     -h, --help:    Display this help message.
-    -f, --cfg:     The configuration file.\
+    -f, --cfg:     The configuration file.
+    -v, --version: Display the session number.\
 '''
 
 from wx import App
@@ -19,12 +20,19 @@ from getopt import getopt
 from sys import argv, exit
 from Controller import Controller
 
+
+VERSION = u"0.0.2"
+
+
 if __name__ == "__main__":
 
     options = getopt(argv[1:], "hf:", ["help", "cfg="])
     for option, value in options[0]:
         if option == "-h" or option == "--help":
             print __doc__
+            exit(0)
+        elif option == "-v" or option == "--version":
+            print VERSION
             exit(0)
         elif option == "-f" or option == "--cfg":
             configFileName = value
