@@ -4,7 +4,7 @@
 '''\
 Created on 21 juin 2012
 @author: Alexandre Neuville
-@version: 0.0.1-SNAPSHOT
+@version: 0.0.1
 
 This program manages a list of scripts. It can execute the scripts and show
 their outputs.
