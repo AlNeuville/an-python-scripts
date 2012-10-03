@@ -53,6 +53,9 @@ class MainWindow(wx.Frame):
     def unCheckAll(self):
         self.__scriptPanel.listPanel.unCheckAll()
 
+    def updateWaitingLabel(self, label):
+        self.__scriptPanel.setLabel(label)
+
 
 class ScriptPanel(wx.Panel):
     '''
@@ -88,7 +91,7 @@ class ScriptPanel(wx.Panel):
         self.inPanel.GetSizer().Layout()
 
     def setLabel(self, label=""):
-        self.scriptButtonPanel.setLabel(label)
+        self.buttonPanel.setLabel(label)
 
 
 class OutputPanel(wx.Panel):
@@ -163,7 +166,7 @@ class ScriptButtonPanel(wx.Panel):
     '''
     This panel contains the execute script button.
     '''
-    LABEL = u"Scripts à exécuter: "
+    LABEL = u"Scripts en attente: "
 
     def __init__(self, parent):
         '''
