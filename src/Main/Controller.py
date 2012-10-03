@@ -11,7 +11,7 @@ import os
 import wx
 from Script import Script
 from subprocess import Popen, PIPE, STDOUT, STARTUPINFO, STARTF_USESHOWWINDOW
-from threading import Thread
+from threading import Thread, Lock
 from Queue import PriorityQueue
 from Gui import MainWindow, MainMenu, AboutDialogWindow, ScriptWindow
 from Model import Model
@@ -30,10 +30,14 @@ class Controller:
         '''
         Constructor
         '''
+        self.scriptsInQueue = {}
+        self.labelLock = Lock()
+
         self.model = Model(**parameters["model"])
         self.icon = parameters.get("icon", None)
         self.view = MainWindow(self.icon)
-        self.executor = ParallelScriptExecutor(self.view.addLine)
+        self.executor = ParallelScriptExecutor(self.onSignalStart,
+                self.onSignalEnd, self.view.addLine)
         self.executor.start()
         self.stop = StopManager(self.executor, self.stopped)
 
@@ -80,6 +84,10 @@ class Controller:
     def onExecuteScript(self, e):
         names = self.view.getChecked()
         for name in names:
+            nbr = self.scriptsInQueue.get(name, 0)
+            self.scriptsInQueue.setdefault(name, nbr + 1)
+            self.updateWaitingLabel()
+
             script = self.model.getScript(name)
             self.executor.messages.put((1, script))
         self.view.unCheckAll()
@@ -87,6 +95,8 @@ class Controller:
     def onQuit(self, e):
         self.view.quit.Disable()
         self.view.execute.Disable()
+        self.scriptsInQueue.clear()
+        self.updateWaitingLabel()
         self.stop.start()
 
     def stopped(self):
@@ -95,6 +105,28 @@ class Controller:
     def onAbout(self, e):
         wx.AboutBox(AboutDialogWindow(self.icon))
 
+    def onSignalStart(self, script):
+        if script and script.name:
+            nbr = self.scriptsInQueue.get(script.name, 0)
+            if nbr > 1:
+                self.scriptsInQueue.setdefault(script.name, nbr - 1)
+            else:
+                self.scriptsInQueue.pop(script.name, None)
+            self.updateWaitingLabel()
+
+    def onSignalEnd(self, script):
+        pass
+
+    def updateWaitingLabel(self):
+        label = ""
+        for name, nbr in self.scriptsInQueue.items():
+            label += u", " + name
+            if nbr > 1:
+                label += u" (" + str(nbr) + ")"
+
+        self.labelLock.acquire(True)
+        self.view.updateWaitingLabel(label[2:])
+        self.labelLock.release()
 
 class ScriptWindowController:
     '''
@@ -159,13 +191,15 @@ class ParallelScriptExecutor(Thread):
     Classdocs
     """
 
-    def __init__(self, call=None):
+    def __init__(self, signalStart=None, signalEnd=None, call=None):
         """
         Constructor
         """
         Thread.__init__(self, None, None, "scriptExecutor", (), {})
         self.messages = PriorityQueue()
         self.callable = call
+        self.signalEnd = signalEnd
+        self.signalStart = signalStart
 
     def run(self):
         while True:
@@ -175,6 +209,9 @@ class ParallelScriptExecutor(Thread):
 
             execObj = None
             try:
+                if self.signalStart:
+                    self.signalStart(msg)
+
                 command = msg.toExecutableString()
                 if self.callable:
                     self.callable(u"Exécution: " + msg.name)
@@ -210,3 +247,5 @@ class ParallelScriptExecutor(Thread):
             finally:
                 if self.callable:
                     self.callable(u"----------------------\n")
+                if self.signalEnd:
+                    self.signalEnd(msg)
