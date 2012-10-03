@@ -1,11 +1,11 @@
 {
-    "Paie": {
-        "executable": "C:\\ULIS_PB9\\Scripts\\ULIS_GW37\\updatePaie.bat"
+    "Test1": {
+        "executable": "C:\\Workspace\\Eclipse\\an.python.scripts\\src\\Main\\resources\\scripts\\test1.bat"
     }, 
-    "GW37": {
-        "executable": "C:\\ULIS_PB9\\Scripts\\ULIS_GW37\\refresh_GW37.bat"
-    }, 
-    "GW52": {
-        "executable": "C:\\ULIS_PB9\\Scripts\\ULIS_GW52\\refresh_GW52.bat"
+    "Test2": {
+        "executable": "C:\\Workspace\\Eclipse\\an.python.scripts\\src\\Main\\resources\\scripts\\test2.bat", 
+        "args": [
+            "11"
+        ]
     }
 }
