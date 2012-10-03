@@ -87,6 +87,9 @@ class ScriptPanel(wx.Panel):
         self.listPanel.deleteScript(name)
         self.inPanel.GetSizer().Layout()
 
+    def setLabel(self, label=""):
+        self.scriptButtonPanel.setLabel(label)
+
 
 class OutputPanel(wx.Panel):
     """
@@ -104,7 +107,7 @@ class OutputPanel(wx.Panel):
         self.text.SetForegroundColour(wx.WHITE)
         self.text.SetBackgroundColour(wx.BLACK)
 
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.text, 1, wx.EXPAND | wx.ALL, 3)
         self.SetSizer(sizer)
 
@@ -160,6 +163,7 @@ class ScriptButtonPanel(wx.Panel):
     '''
     This panel contains the execute script button.
     '''
+    LABEL = u"Scripts à exécuter: "
 
     def __init__(self, parent):
         '''
@@ -170,13 +174,20 @@ class ScriptButtonPanel(wx.Panel):
         self.execute = wx.Button(self, wx.ID_ANY, u"Exécuter")
         self.add = wx.Button(self, wx.ID_ADD, u"Ajouter")
         self.delete = wx.Button(self, wx.ID_REMOVE, u"Supprimer")
+        self.label = wx.StaticText(self, wx.ID_ANY, ScriptButtonPanel.LABEL)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self.add, 0)
         sizer.Add(self.delete, 0)
+        sizer.Add(self.label, 0, wx.ALL | wx.ALIGN_CENTER, 3)
         sizer.AddStretchSpacer(1)
         sizer.Add(self.execute, 0)
         self.SetSizer(sizer)
+
+    def setLabel(self, label=""):
+        if not label:
+            label = ""
+        self.label.SetLabel(ScriptButtonPanel.LABEL + label)
 
 
 class QuitButtonPanel(wx.Panel):
