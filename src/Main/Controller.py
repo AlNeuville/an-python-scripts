@@ -9,7 +9,6 @@ Created on 21 juin 2012
 
 import os
 import wx
-from Script import Script
 from subprocess import Popen, PIPE, STDOUT, STARTUPINFO, STARTF_USESHOWWINDOW
 from threading import Thread, Lock
 from Queue import PriorityQueue
@@ -73,30 +72,30 @@ class Controller:
         for name in self.view.getChecked():
             self.model.deleteScript(name)
 
-    def onScriptAdd(self, message):
-        script = message.data
+    def onScriptAdd(self, script):
         self.view.addScript(script.name)
 
-    def onScriptDelete(self, message):
-        name = message.data
-        self.view.deleteScript(name)
+    def onScriptDelete(self, script):
+        self.view.deleteScript(script)
 
     def onExecuteScript(self, e):
         names = self.view.getChecked()
-        for name in names:
-            nbr = self.scriptsInQueue.get(name, 0)
-            self.scriptsInQueue.setdefault(name, nbr + 1)
-            self.updateWaitingLabel()
+        if len(names) == 0:
+            return
 
+        for name in names:
+            self.addScriptInWaitingQueue(name)
+
+        for name in names:
             script = self.model.getScript(name)
             self.executor.messages.put((1, script))
+
         self.view.unCheckAll()
 
     def onQuit(self, e):
         self.view.quit.Disable()
         self.view.execute.Disable()
-        self.scriptsInQueue.clear()
-        self.updateWaitingLabel()
+        self.clearWaitingQueue()
         self.stop.start()
 
     def stopped(self):
@@ -107,26 +106,51 @@ class Controller:
 
     def onSignalStart(self, script):
         if script and script.name:
-            nbr = self.scriptsInQueue.get(script.name, 0)
-            if nbr > 1:
-                self.scriptsInQueue.setdefault(script.name, nbr - 1)
-            else:
-                self.scriptsInQueue.pop(script.name, None)
-            self.updateWaitingLabel()
+            self.removeScriptFromWaitingQueue(script.name)
 
     def onSignalEnd(self, script):
         pass
 
-    def updateWaitingLabel(self):
-        label = ""
-        for name, nbr in self.scriptsInQueue.items():
-            label += u", " + name
-            if nbr > 1:
-                label += u" (" + str(nbr) + ")"
-
+    def addScriptInWaitingQueue(self, name):
         self.labelLock.acquire(True)
-        self.view.updateWaitingLabel(label[2:])
+        nbr = self.scriptsInQueue.get(name, 0)
+        if nbr == 0:
+            self.scriptsInQueue.setdefault(name, 1)
+        else:
+            self.scriptsInQueue[name] = nbr + 1
+        self.updateWaitingLabel()
         self.labelLock.release()
+
+    def removeScriptFromWaitingQueue(self, name):
+        self.labelLock.acquire(True)
+        nbr = self.scriptsInQueue.get(name)
+        if nbr > 1:
+            self.scriptsInQueue[name] = nbr - 1
+        else:
+            self.scriptsInQueue.pop(name, None)
+        self.updateWaitingLabel()
+        self.labelLock.release()
+
+    def clearWaitingQueue(self):
+        self.labelLock.acquire(True)
+        self.scriptsInQueue.clear()
+        self.updateWaitingLabel()
+        self.labelLock.release()
+
+    def updateWaitingLabel(self):
+        label = []
+        for name, nbr in self.scriptsInQueue.items():
+            label.append(u", ")
+            label.append(name)
+            if nbr > 1:
+                label.append(u" (")
+                label.append(str(nbr))
+                label.append(u")")
+        if len(label) > 1:
+            self.view.updateWaitingLabel(''.join(label[1:]))
+        else:
+            self.view.updateWaitingLabel("")
+
 
 class ScriptWindowController:
     '''
@@ -151,18 +175,19 @@ class ScriptWindowController:
 
         executable = self.view.getScriptExecutable()
         args = self.view.getArgs()
-        kwargs = self.view.getKwargs()
+        try:
+            kwargs = self.view.getKwargs()
 
-        if args and kwargs:
-            self.model.addScript(name, executable, *args, **kwargs)
-        elif args:
-            self.model.addScript(name, executable, *args)
-        elif kwargs:
-            self.model.addScript(name, executable, **kwargs)
-        else:
-            self.model.addScript(name, executable)
-
-        self.view.Destroy()
+            if args and kwargs:
+                self.model.addScript(name, executable, *args, **kwargs)
+            elif args:
+                self.model.addScript(name, executable, *args)
+            elif kwargs:
+                self.model.addScript(name, executable, **kwargs)
+            else:
+                self.model.addScript(name, executable)
+        finally:
+            self.view.Destroy()
 
     def onCancel(self, e):
         self.view.Destroy()

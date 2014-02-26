@@ -8,7 +8,7 @@ Created on 26 juin 2012
 '''
 
 from Script import ScriptServiceFactory, WindowsScript
-from wx.lib.pubsub import Publisher
+from wx.lib.pubsub.core import Publisher
 
 
 class Model:
@@ -38,7 +38,7 @@ class Model:
         script = WindowsScript(name, executable, *args, **kwargs)
         self.service.saveScript(script)
         self.messages.setdefault(name, script)
-        self.pub.sendMessage("SCRIPT ADDED", script)
+        self.pub.sendMessage("SCRIPT ADDED", script=script)
 
     def deleteScript(self, name):
         '''
@@ -52,7 +52,7 @@ class Model:
 
         self.service.deleteScript(script)
         del self.messages[name]
-        self.pub.sendMessage("SCRIPT DELETED", name)
+        self.pub.sendMessage("SCRIPT DELETED", script=name)
 
     def getScript(self, name):
         '''
