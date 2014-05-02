@@ -7,11 +7,13 @@ Created on 21 juin 2012
 @author: Alexandre Neuville
 '''
 
-import os
-import wx
+from Queue import PriorityQueue
 from subprocess import Popen, PIPE, STDOUT, STARTUPINFO, STARTF_USESHOWWINDOW
 from threading import Thread, Lock
-from Queue import PriorityQueue
+import os
+
+import wx
+
 from Gui import MainWindow, MainMenu, AboutDialogWindow, ScriptWindow
 from Model import Model
 
@@ -51,6 +53,7 @@ class Controller:
         self.view.Bind(wx.EVT_BUTTON, self.onExecuteScript, self.view.execute)
         self.view.Bind(wx.EVT_BUTTON, self.addScript, self.view.add)
         self.view.Bind(wx.EVT_BUTTON, self.deleteScript, self.view.delete)
+        self.view.Bind(wx.EVT_BUTTON, self.checkAll, self.view.addAll)
 
         self.view.Center(wx.CENTER_ON_SCREEN)
         self.view.Show(True)
@@ -150,6 +153,9 @@ class Controller:
             self.view.updateWaitingLabel(''.join(label[1:]))
         else:
             self.view.updateWaitingLabel("")
+
+    def checkAll(self, e):
+        self.view.checkAll()
 
 
 class ScriptWindowController:
