@@ -37,6 +37,7 @@ class MainWindow(wx.Frame):
         self.execute = self.__scriptPanel.buttonPanel.execute
         self.add = self.__scriptPanel.buttonPanel.add
         self.delete = self.__scriptPanel.buttonPanel.delete
+        self.addAll = self.__scriptPanel.buttonPanel.addAll
 
     def addScript(self, name):
         self.__scriptPanel.addScript(name)
@@ -52,6 +53,9 @@ class MainWindow(wx.Frame):
 
     def unCheckAll(self):
         self.__scriptPanel.listPanel.unCheckAll()
+
+    def checkAll(self):
+        self.__scriptPanel.listPanel.checkAll()
 
     def updateWaitingLabel(self, label):
         self.__scriptPanel.setLabel(label)
@@ -161,6 +165,10 @@ class ListScriptPanel(wx.Panel):
         for box in self.boxes.values():
             box.SetValue(False)
 
+    def checkAll(self):
+        for box in self.boxes.values():
+            box.SetValue(True)
+
 
 class ScriptButtonPanel(wx.Panel):
     '''
@@ -178,10 +186,12 @@ class ScriptButtonPanel(wx.Panel):
         self.add = wx.Button(self, wx.ID_ADD, u"Ajouter")
         self.delete = wx.Button(self, wx.ID_REMOVE, u"Supprimer")
         self.label = wx.StaticText(self, wx.ID_ANY, ScriptButtonPanel.LABEL)
+        self.addAll = wx.Button(self, wx.ID_ANY, u"Sél. tout")
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self.add, 0)
         sizer.Add(self.delete, 0)
+        sizer.Add(self.addAll, 0)
         sizer.Add(self.label, 0, wx.ALL | wx.ALIGN_CENTER, 3)
         sizer.AddStretchSpacer(1)
         sizer.Add(self.execute, 0)
