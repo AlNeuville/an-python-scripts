@@ -5,7 +5,7 @@
             {
                 "className":"Main.Script.JsonWindowsScriptDAO",
                 "namespace":"json",
-                "fileName":"src/Main/resources/Scripts.json",
+                "fileName":"src/main/resources/Scripts.json",
                 "encoding":"utf8"
             }
         ]
