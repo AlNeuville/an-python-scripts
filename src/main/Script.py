@@ -12,6 +12,7 @@ import sys
 
 
 class Error(Exception):
+
     '''
     General error class for the Script module.
     '''
@@ -19,6 +20,7 @@ class Error(Exception):
 
 
 class ParameterError(Error):
+
     '''
     Configuration error (missing parameter, unknown parameter, etc).
     '''
@@ -26,6 +28,7 @@ class ParameterError(Error):
 
 
 class UnknownNameSpaceError(Error):
+
     '''
     An unknown DAO is found or no DAO is found.
     '''
@@ -33,6 +36,7 @@ class UnknownNameSpaceError(Error):
 
 
 class Script:
+
     '''
     This class contains a general script.
     '''
@@ -90,6 +94,7 @@ class Script:
 
 
 class WindowsScript(Script):
+
     '''
     This class contains a Windows script.
     '''
@@ -128,6 +133,7 @@ class WindowsScript(Script):
 
 
 class JsonWindowsScriptDAO:
+
     '''
     This DAO interacts with a JSON file to extract or save messages.
     '''
@@ -230,6 +236,7 @@ class JsonWindowsScriptDAO:
 
 
 class ScriptService:
+
     '''
     This class implements a Script service
     '''
@@ -247,7 +254,7 @@ class ScriptService:
         for dao in parameters["daos"]:
             if "className" not in dao:
                 raise ParameterError(
-                        "Parameter 'className' not found in dao configuration")
+                    "Parameter 'className' not found in dao configuration")
 
             daoName = dao["className"]
             nspc = dao.get("namespace", None)
@@ -334,16 +341,18 @@ class ScriptService:
 
 
 class ScriptServiceFactory:
+
     '''
     This class is the factory that builds ScriptService instance.
     '''
+
     def __init__(self, **parameters):
         if not parameters or "className" not in parameters:
             raise ParameterError("Parameter 'className' not found")
 
         names = parameters["className"].split('.')
         self.__service = getattr(sys.modules[__name__],
-                names[-1])(**parameters)
+                                 names[-1])(**parameters)
 
     @property
     def service(self):

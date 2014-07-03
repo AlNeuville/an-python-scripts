@@ -37,8 +37,7 @@ class Controller:
         self.model = Model(**parameters["model"])
         self.icon = parameters.get("icon", None)
         self.view = MainWindow(self.icon)
-        self.executor = ParallelScriptExecutor(self.onSignalStart,
-                self.onSignalEnd, self.view.addLine)
+        self.executor = ParallelScriptExecutor(self.onSignalStart, self.onSignalEnd, self.view.addLine)
         self.executor.start()
         self.stop = StopManager(self.executor, self.stopped)
 
@@ -68,10 +67,10 @@ class Controller:
 
         return menu
 
-    def addScript(self, e):
+    def addScript(self, unusedEvent):
         ScriptWindowController(self.model, self.view)
 
-    def deleteScript(self, e):
+    def deleteScript(self, unusedEvent):
         for name in self.view.getChecked():
             self.model.deleteScript(name)
 
@@ -81,7 +80,7 @@ class Controller:
     def onScriptDelete(self, script):
         self.view.deleteScript(script)
 
-    def onExecuteScript(self, e):
+    def onExecuteScript(self, unusedEvent):
         names = self.view.getChecked()
         if len(names) == 0:
             return
@@ -95,7 +94,7 @@ class Controller:
 
         self.view.unCheckAll()
 
-    def onQuit(self, e):
+    def onQuit(self, unusedEvent):
         self.view.quit.Disable()
         self.view.execute.Disable()
         self.clearWaitingQueue()
@@ -104,7 +103,7 @@ class Controller:
     def stopped(self):
         self.view.Close()
 
-    def onAbout(self, e):
+    def onAbout(self, unusedEvent):
         wx.AboutBox(AboutDialogWindow(self.icon))
 
     def onSignalStart(self, script):
@@ -154,7 +153,7 @@ class Controller:
         else:
             self.view.updateWaitingLabel("")
 
-    def checkAll(self, e):
+    def checkAll(self, unusedEvent):
         self.view.checkAll()
 
 
@@ -195,7 +194,7 @@ class ScriptWindowController:
         finally:
             self.view.Destroy()
 
-    def onCancel(self, e):
+    def onCancel(self, unusedEvent):
         self.view.Destroy()
 
 
@@ -253,16 +252,14 @@ class ParallelScriptExecutor(Thread):
                 if os.name == "nt":
                     si = STARTUPINFO()
                     si.dwFlags |= STARTF_USESHOWWINDOW
-                    execObj = Popen(command.encode("cp850"), stdout=PIPE,
-                            stderr=STDOUT, universal_newlines=True,
-                            startupinfo=si)
+                    execObj = Popen(command.encode("cp850"), stdout=PIPE, stderr=STDOUT, universal_newlines=True,
+                                    startupinfo=si)
                 else:
-                    raise ControllerError("Execution not implemented for" + \
-                            " other OS than Microsoft Windows")
+                    raise ControllerError("Execution not implemented for other OS than Microsoft Windows")
 
                 if self.callable:
                     self.callable(u"Output:")
-                    while execObj.poll() == None:
+                    while execObj.poll() is None:
                         line = execObj.stdout.readline().strip()
                         if len(line) > 0:
                             self.callable(line.decode("cp850"))
@@ -271,7 +268,7 @@ class ParallelScriptExecutor(Thread):
             except Exception, e:
                 if self.callable:
                     self.callable(str(e).decode("cp1252"))
-                    if execObj and execObj.poll() != None:
+                    if execObj and execObj.poll() is not None:
                         execObj.kill()
                 else:
                     print str(e).decode("cp1252")

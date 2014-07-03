@@ -7,11 +7,13 @@ Created on 26 juin 2012
 @author: u205992
 '''
 
+from wx.lib.pubsub.core.publisher import Publisher
+
 from Script import ScriptServiceFactory, WindowsScript
-from wx.lib.pubsub.core import Publisher
 
 
 class Model:
+
     '''
     This class implements the model of the script manager program.
     '''

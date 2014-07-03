@@ -19,8 +19,7 @@ class MainWindow(wx.Frame):
         '''
         Constructor
         '''
-        wx.Frame.__init__(self, None, wx.ID_ANY, u"Gestionnaire Scripts",
-                size=(600, 400))
+        wx.Frame.__init__(self, None, wx.ID_ANY, u"Gestionnaire Scripts", size=(600, 400))
 
         if iconFileName:
             self.SetIcon(wx.Icon(iconFileName, wx.BITMAP_TYPE_ICO))
@@ -109,8 +108,7 @@ class OutputPanel(wx.Panel):
         '''
         wx.Panel.__init__(self, parent, wx.ID_ANY)
 
-        self.text = wx.TextCtrl(self, wx.ID_ANY,
-                style=wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text = wx.TextCtrl(self, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.text.SetForegroundColour(wx.WHITE)
         self.text.SetBackgroundColour(wx.BLACK)
 
@@ -234,17 +232,13 @@ class MainMenu(wx.MenuBar):
         wx.MenuBar.__init__(self)
 
         fileMenu = wx.Menu()
-        self.addItem = fileMenu.Append(wx.ID_NEW, u"Ajouter",
-                u"Ajouter un nouveau script")
-        self.delItem = fileMenu.Append(wx.ID_DELETE, u"Supprimer",
-                u"Supprimer les scripts sélectionnés")
+        self.addItem = fileMenu.Append(wx.ID_NEW, u"Ajouter", u"Ajouter un nouveau script")
+        self.delItem = fileMenu.Append(wx.ID_DELETE, u"Supprimer", u"Supprimer les scripts sélectionnés")
         fileMenu.AppendSeparator()
-        self.qItem = fileMenu.Append(wx.ID_EXIT, u"Quitter",
-                u"Quitter l'application")
+        self.qItem = fileMenu.Append(wx.ID_EXIT, u"Quitter", u"Quitter l'application")
 
         aboutMenu = wx.Menu()
-        self.aItem = aboutMenu.Append(wx.ID_ABOUT, u"A propos",
-                u"Au sujet de l'application")
+        self.aItem = aboutMenu.Append(wx.ID_ABOUT, u"A propos", u"Au sujet de l'application")
 
         self.Append(fileMenu, u"&Fichier")
         self.Append(aboutMenu, u"&Aide")
@@ -276,8 +270,7 @@ class ScriptWindow(wx.Dialog):
     '''
 
     def __init__(self, parent, script=None):
-        wx.Dialog.__init__(self, parent, wx.ID_ANY,
-                title=u"Propriété d'un script")
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=u"Propriété d'un script")
 
         self.scriptDescriptionPanel = ScriptDescriptionPanel(self, script)
         self.buttonPanel = OkCancelButtonPanel(self)
@@ -353,8 +346,7 @@ class ScriptDescriptionPanel(wx.Panel):
             kStr.append(key + u"=" + value)
 
         inPanelKwargs = wx.Panel(self, wx.ID_ANY)
-        kwargsLabel = wx.StaticText(inPanelKwargs, wx.ID_ANY,
-                u"Arguments nommés:")
+        kwargsLabel = wx.StaticText(inPanelKwargs, wx.ID_ANY, u"Arguments nommés:")
         self.kwargsCtrl = wx.TextCtrl(inPanelKwargs, wx.ID_ANY, ' '.join(kStr))
 
         inSizerKwargs = wx.BoxSizer(wx.VERTICAL)
