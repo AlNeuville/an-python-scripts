@@ -1,5 +1,6 @@
 .project
 .pydevproject
-.classpath
 *.pyc
+*.pyo
 .settings
+__pycache__
