@@ -1,0 +1,1 @@
+Ce petit programme offre une interface d'exécution sympathique pour exécuter des scripts batch sous Windows.
