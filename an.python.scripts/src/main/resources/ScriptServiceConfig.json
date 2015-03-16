@@ -1,14 +1,14 @@
 {
-    "model":{
-        "className":"Main.Script.ScriptService",
-        "daos":[
+    "model" : {
+        "className" : "Main.Script.ScriptService",
+        "daos" : [
             {
-                "className":"Main.Script.JsonWindowsScriptDAO",
-                "namespace":"json",
-                "fileName":"resources/Scripts.json",
-                "encoding":"utf8"
+                "className" : "Main.Script.JsonWindowsScriptDAO",
+                "namespace" : "json",
+                "fileName" : "src/main/resources/Scripts.json",
+                "encoding" : "utf8"
             }
         ]
     },
-    "icon":"resources/icone.ico"
+    "icon" : "src/main/resources/icone.ico"
 }
