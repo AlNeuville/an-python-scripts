@@ -32,6 +32,7 @@ class MainWindow(wx.Frame):
         sizer.Add(quitButtonPanel, 0, wx.EXPAND)
         self.SetSizer(sizer)
 
+        self.isAutoQuit = quitButtonPanel.isAutoQuit
         self.quit = quitButtonPanel.quit
         self.execute = self.__scriptPanel.buttonPanel.execute
         self.add = self.__scriptPanel.buttonPanel.add
@@ -212,10 +213,13 @@ class QuitButtonPanel(wx.Panel):
         '''
         wx.Panel.__init__(self, parent, wx.ID_ANY)
 
+        self.isAutoQuit = wx.CheckBox(self, wx.ID_ANY, u"Quitter en fin d'exécution")
+
         self.quit = wx.Button(self, wx.ID_EXIT, u"Quitter")
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.AddStretchSpacer(1)
+        sizer.Add(self.isAutoQuit, 0, wx.CENTER, 3)
         sizer.Add(self.quit, 0, wx.ALL, 3)
         self.SetSizer(sizer)
 

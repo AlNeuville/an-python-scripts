@@ -10,5 +10,6 @@
             }
         ]
     },
-    "icon" : "src/main/resources/icone.ico"
+    "icon" : "src/main/resources/icone.ico",
+    "autoQuit" : true
 }

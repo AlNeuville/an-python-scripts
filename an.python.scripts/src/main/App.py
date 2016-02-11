@@ -4,7 +4,7 @@
 '''\
 Created on 21 juin 2012
 @author: Alexandre Neuville
-@version: 0.0.2
+@version: 0.1.0
 
 This program manages a list of scripts. It can execute the scripts and show
 their outputs.
@@ -14,14 +14,16 @@ Options:
     -v, --version: Display the session number.\
 '''
 
-from wx import App
-from json import load
 from getopt import getopt
+from json import load
 from sys import argv, exit
+
+from wx import App
+
 from Controller import Controller
 
 
-VERSION = u"0.0.2"
+VERSION = u"0.1.0"
 
 
 if __name__ == "__main__":
