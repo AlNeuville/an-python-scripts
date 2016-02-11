@@ -48,6 +48,10 @@ class Controller:
         self.model.pub.subscribe(self.onScriptAdd, "SCRIPT ADDED")
         self.model.pub.subscribe(self.onScriptDelete, "SCRIPT DELETED")
 
+        self.autoQuitEnable = parameters.get("autoQuit", False)
+        self.view.Bind(wx.EVT_CHECKBOX, self.onQuitCheck, self.view.isAutoQuit)
+        self.view.isAutoQuit.SetValue(self.autoQuitEnable)
+
         self.view.Bind(wx.EVT_BUTTON, self.onQuit, self.view.quit)
         self.view.Bind(wx.EVT_BUTTON, self.onExecuteScript, self.view.execute)
         self.view.Bind(wx.EVT_BUTTON, self.addScript, self.view.add)
@@ -111,7 +115,14 @@ class Controller:
             self.removeScriptFromWaitingQueue(script.name)
 
     def onSignalEnd(self, script):
-        pass
+        if self.autoQuitEnable:
+            self.onQuit(None)
+
+    def onQuitCheck(self, unusedEvent):
+        if self.view.isAutoQuit.IsChecked():
+            self.autoQuitEnable = True
+        else:
+            self.autoQuitEnable = False
 
     def addScriptInWaitingQueue(self, name):
         self.labelLock.acquire(True)
@@ -161,6 +172,7 @@ class ScriptWindowController:
     '''
     Classdocs
     '''
+
     def __init__(self, model, parent, script=None):
         '''
         Constructor
@@ -202,6 +214,7 @@ class StopManager(Thread):
     """
     Classdocs
     """
+
     def __init__(self, managed, call):
         """
         Constructor
