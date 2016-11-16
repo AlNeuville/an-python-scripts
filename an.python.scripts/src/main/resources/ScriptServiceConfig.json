@@ -5,11 +5,11 @@
             {
                 "className" : "Main.Script.JsonWindowsScriptDAO",
                 "namespace" : "json",
-                "fileName" : "src/main/resources/Scripts.json",
+                "fileName" : "resources/Scripts.json",
                 "encoding" : "utf8"
             }
         ]
     },
-    "icon" : "src/main/resources/icone.ico",
+    "icon" : "resources/icone.ico",
     "autoQuit" : true
 }
