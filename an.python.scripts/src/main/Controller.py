@@ -1,11 +1,11 @@
 #!usr/bin/env python
 # -*- coding:utf-8 -*-
 
-'''
+"""
 Created on 21 juin 2012
 
 @author: Alexandre Neuville
-'''
+"""
 
 from Queue import PriorityQueue
 from subprocess import Popen, PIPE, STDOUT, STARTUPINFO, STARTF_USESHOWWINDOW
@@ -23,14 +23,14 @@ class ControllerError(Exception):
 
 
 class Controller:
-    '''
+    """
     This class implements the controller for the Script objects.
-    '''
+    """
 
     def __init__(self, **parameters):
-        '''
+        """
         Constructor
-        '''
+        """
         self.scriptsInQueue = {}
         self.labelLock = Lock()
 
@@ -115,7 +115,7 @@ class Controller:
             self.removeScriptFromWaitingQueue(script.name)
 
     def onSignalEnd(self, script):
-        if self.autoQuitEnable:
+        if self.autoQuitEnable and len(self.scriptsInQueue) == 0:
             self.onQuit(None)
 
     def onQuitCheck(self, unusedEvent):
@@ -169,14 +169,14 @@ class Controller:
 
 
 class ScriptWindowController:
-    '''
+    """
     Classdocs
-    '''
+    """
 
     def __init__(self, model, parent, script=None):
-        '''
+        """
         Constructor
-        '''
+        """
         self.model = model
         self.view = ScriptWindow(parent, script)
 
