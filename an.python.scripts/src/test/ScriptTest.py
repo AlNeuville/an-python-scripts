@@ -71,8 +71,7 @@ class WindowsScriptTest(unittest.TestCase):
         script = WindowsScript("monScript", "boum.sh", "arg1", "arg2", arg3="a", arg4="b")
         r_str = script.toExecutableString()
 
-        assert r_str == "boum.sh arg1 arg2 -arg3=a -arg4=b", \
-            "Problem with " + r_str
+        assert r_str == "boum.sh arg1 arg2 -arg3=a -arg4=b", "Problem with " + r_str
         print r_str
 
     @staticmethod
@@ -90,7 +89,7 @@ class WindowsScriptTest(unittest.TestCase):
         script.addArg("a", "arg2")
         r_str = script.toExecutableString()
 
-        assert r_str == "boum.sh arg1 -arg2=a", "Problem with" + r_str
+        assert r_str == "boum.sh arg1 -arg2=a", "Problem with " + r_str
         print r_str
 
 
@@ -122,10 +121,8 @@ class JsonDAOTest(unittest.TestCase):
 
 
 class ScriptServiceTest(unittest.TestCase):
-    configFile = "resources/ScriptServiceTestConfig.json"
-
     def setUp(self):
-        with open(self.configFile) as f:
+        with open("resources/ScriptServiceTestConfig.json") as f:
             parameters = json.load(f, encoding=f.encoding)
             self.factory = ScriptServiceFactory(**parameters)
 
@@ -146,6 +143,5 @@ class ScriptServiceTest(unittest.TestCase):
         assert service.saveScript(script, "json") is True, "Script not saved"
         print "Script saved"
 
-        assert service.saveScript(script) is True, \
-            "Script without ns not saved"
+        assert service.saveScript(script) is True, "Script without ns not saved"
         print "Script saved"
