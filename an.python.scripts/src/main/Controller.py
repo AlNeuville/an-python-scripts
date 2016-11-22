@@ -71,9 +71,11 @@ class Controller:
 
         return menu
 
+    # noinspection PyUnusedLocal
     def addScript(self, unusedEvent):
         ScriptWindowController(self.model, self.view)
 
+    # noinspection PyUnusedLocal
     def deleteScript(self, unusedEvent):
         for name in self.view.getChecked():
             self.model.deleteScript(name)
@@ -84,6 +86,7 @@ class Controller:
     def onScriptDelete(self, script):
         self.view.deleteScript(script)
 
+    # noinspection PyUnusedLocal
     def onExecuteScript(self, unusedEvent):
         names = self.view.getChecked()
         if len(names) == 0:
@@ -98,6 +101,7 @@ class Controller:
 
         self.view.unCheckAll()
 
+    # noinspection PyUnusedLocal
     def onQuit(self, unusedEvent):
         self.view.quit.Disable()
         self.view.execute.Disable()
@@ -107,6 +111,7 @@ class Controller:
     def stopped(self):
         self.view.Close()
 
+    # noinspection PyUnusedLocal
     def onAbout(self, unusedEvent):
         wx.AboutBox(AboutDialogWindow(self.icon))
 
@@ -114,10 +119,12 @@ class Controller:
         if script and script.name:
             self.removeScriptFromWaitingQueue(script.name)
 
+    # noinspection PyUnusedLocal
     def onSignalEnd(self, script):
         if self.autoQuitEnable and len(self.scriptsInQueue) == 0:
             self.onQuit(None)
 
+    # noinspection PyUnusedLocal
     def onQuitCheck(self, unusedEvent):
         if self.view.isAutoQuit.IsChecked():
             self.autoQuitEnable = True
@@ -164,6 +171,7 @@ class Controller:
         else:
             self.view.updateWaitingLabel("")
 
+    # noinspection PyUnusedLocal
     def checkAll(self, unusedEvent):
         self.view.checkAll()
 
@@ -206,6 +214,7 @@ class ScriptWindowController:
         finally:
             self.view.Destroy()
 
+    # noinspection PyUnusedLocal
     def onCancel(self, unusedEvent):
         self.view.Destroy()
 
@@ -250,7 +259,7 @@ class ParallelScriptExecutor(Thread):
             if msg == "EXIT_THREAD":
                 break
 
-            execObj = None
+            exec_obj = None
             try:
                 if self.signalStart:
                     self.signalStart(msg)
@@ -261,19 +270,19 @@ class ParallelScriptExecutor(Thread):
                     self.callable(u"Command: " + command)
                     self.callable(u"\n")
 
-                execObj = None
+                exec_obj = None
                 if os.name == "nt":
                     si = STARTUPINFO()
                     si.dwFlags |= STARTF_USESHOWWINDOW
-                    execObj = Popen(command.encode("cp850"), stdout=PIPE, stderr=STDOUT, universal_newlines=True,
-                                    startupinfo=si)
+                    exec_obj = Popen(command.encode("cp850"), stdout=PIPE, stderr=STDOUT, universal_newlines=True,
+                                     startupinfo=si)
                 else:
                     raise ControllerError("Execution not implemented for other OS than Microsoft Windows")
 
                 if self.callable:
                     self.callable(u"Output:")
-                    while execObj.poll() is None:
-                        line = execObj.stdout.readline().strip()
+                    while exec_obj.poll() is None:
+                        line = exec_obj.stdout.readline().strip()
                         if len(line) > 0:
                             self.callable(line.decode("cp850"))
 
@@ -281,8 +290,8 @@ class ParallelScriptExecutor(Thread):
             except Exception, e:
                 if self.callable:
                     self.callable(str(e).decode("cp1252"))
-                    if execObj and execObj.poll() is not None:
-                        execObj.kill()
+                    if exec_obj and exec_obj.poll() is not None:
+                        exec_obj.kill()
                 else:
                     print str(e).decode("cp1252")
             finally:

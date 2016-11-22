@@ -1,7 +1,7 @@
 #!usr/bin/env python
 # -*- coding:utf-8 -*-
 
-'''\
+"""\
 Created on 21 juin 2012
 @author: Alexandre Neuville
 @version: 0.1.0
@@ -12,7 +12,7 @@ Options:
     -h, --help:    Display this help message.
     -f, --cfg:     The configuration file.
     -v, --version: Display the session number.\
-'''
+"""
 
 from getopt import getopt
 from json import load
@@ -28,6 +28,7 @@ VERSION = u"0.1.0"
 
 if __name__ == "__main__":
 
+    configFileName = None
     options = getopt(argv[1:], "hf:", ["help", "cfg="])
     for option, value in options[0]:
         if option == "-h" or option == "--help":
