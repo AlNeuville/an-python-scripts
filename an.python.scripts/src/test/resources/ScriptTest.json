@@ -1,2 +1,20 @@
 {
+    "monScript": {
+        "executable": "boum.sh", 
+        "args": [
+            "arg1"
+        ], 
+        "kwargs": {
+            "arg2": "a"
+        }
+    }, 
+    "savedScript": {
+        "executable": "boum.sh", 
+        "args": [
+            "args1"
+        ], 
+        "kwargs": {
+            "arg2": "b"
+        }
+    }
 }
