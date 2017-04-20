@@ -144,6 +144,7 @@ class JsonWindowsScriptDAO:
         if "encoding" in parameters:
             self.encoding = parameters["encoding"]
 
+        self.messages = None
         with open(self.fileName) as f:
             self.messages = json.load(f, encoding=self.encoding)
 
