@@ -29,6 +29,7 @@ VERSION = u"0.1.0"
 if __name__ == "__main__":
 
     configFileName = None
+    encoding = "utf-8"
     options = getopt(argv[1:], "hf:", ["help", "cfg="])
     for option, value in options[0]:
         if option == "-h" or option == "--help":
@@ -39,10 +40,12 @@ if __name__ == "__main__":
             exit(0)
         elif option == "-f" or option == "--cfg":
             configFileName = value
+        elif option == "-e" or option == "--encoding":
+            encoding = value
 
     parameters = None
     with open(configFileName) as f:
-        parameters = load(f, f.encoding)
+        parameters = load(f, encoding)
     if not parameters:
         print "Configuration not read"
         exit(1)
