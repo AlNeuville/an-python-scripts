@@ -2,54 +2,35 @@
 # -*- coding:utf-8 -*-
 
 """\
-Created on 21 juin 2012
-@author: Alexandre Neuville
-@version: 0.1.0
-
 This program manages a list of scripts. It can execute the scripts and show
 their outputs.
-Options:
-    -h, --help:    Display this help message.
-    -f, --cfg:     The configuration file.
-    -v, --version: Display the session number.\
 """
 
-from getopt import getopt
-from json import load
-from sys import argv, exit
+from argparse import ArgumentParser
+from sys import exit
+from tkinter import Tk
 
-from wx import App
-
-from controller import Controller
-
+from controller import MainWindowController
+from gui import MainWindow
 
 VERSION = u"0.1.0"
 
-
 if __name__ == "__main__":
 
-    configFileName = None
-    encoding = "utf-8"
-    options = getopt(argv[1:], "hf:", ["help", "cfg="])
-    for option, value in options[0]:
-        if option == "-h" or option == "--help":
-            print(__doc__)
-            exit(0)
-        elif option == "-v" or option == "--version":
-            print(VERSION)
-            exit(0)
-        elif option == "-f" or option == "--cfg":
-            configFileName = value
-        elif option == "-e" or option == "--encoding":
-            encoding = value
+	parser = ArgumentParser()
+	parser.add_argument(
+		'-e', '--encoding', type=str, help='Encoding of the configuration file', default='utf-8', dest='encoding')
+	parser.add_argument('-v', '--version', help='Print the version', action='store_true')
+	parser.add_argument(
+		'-c', '--configuration', type=str, help='Configuration file to use', dest='configuration')
+	args = parser.parse_args()
 
-    with open(configFileName, encoding) as f:
-        parameters = load(f)
-    if not parameters:
-        print("Configuration not read")
-        exit(1)
+	if args.version:
+		print("Version is", VERSION)
+		exit(0)
 
-    app = App(False)
-    app.SetVendorName("Alexandre Neuville")
-    controller = Controller(**parameters)
-    app.MainLoop()
+	root = Tk()
+	root.title("Script Management")
+	application = MainWindow(master=root)
+	controller = MainWindowController(root, application)
+	application.mainloop()
