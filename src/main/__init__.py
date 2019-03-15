@@ -1,1 +1,1 @@
-__all__ = ["script.py", "gui.py", "controller.py", "model.py"]
+__all__ = ["app", "controller", "gui", "model"]
