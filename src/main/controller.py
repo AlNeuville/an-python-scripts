@@ -14,8 +14,8 @@ import os
 
 import wx
 
-from Gui import MainWindow, MainMenu, AboutDialogWindow, ScriptWindow
-from Model import Model
+from gui import MainWindow, MainMenu, AboutDialogWindow, ScriptWindow
+from model import Model
 
 
 class ControllerError(Exception):

@@ -13,83 +13,74 @@ from Script import Script, WindowsScript, JsonWindowsScriptDAO, ScriptServiceFac
 
 
 class ScriptTest(unittest.TestCase):
-    @staticmethod
-    def testSequenceOnlyArgs():
+    def testSequenceOnlyArgs(self):
         script = Script("monScript", "boum.sh", "arg1", "arg2")
-        assert script
+        self.assertIsNotNone(script)
         print(script)
 
-    @staticmethod
-    def testDictionnaryOnlyArgs():
+    def testDictionnaryOnlyArgs(self):
         script = Script("monScript", "boum.sh", arg1="a", arg2="b")
-        assert script
+        self.assertIsNotNone(script)
         print(script)
 
-    @staticmethod
-    def testCompleteArgs():
+    def testCompleteArgs(self):
         script = Script("monScript", "boum.sh", "arg1", "arg2", arg3="a",
                         arg4="b")
-        assert script
+        self.assertIsNotNone(script)
         print(script)
 
-    @staticmethod
-    def testEmptyScript():
+    def testEmptyScript(self):
         script = Script("empty")
-        assert script
+        self.assertIsNotNone(script)
         print(script)
 
-    @staticmethod
-    def testAddArguments():
+    def testAddArguments(self):
         script = Script("monScript", "boum.sh")
 
         script.addArg("arg1")
         script.addArg("a", "arg2")
 
-        assert script
+        self.assertIsNotNone(script)
         print(script)
 
 
 class WindowsScriptTest(unittest.TestCase):
-    @staticmethod
-    def testSequenceOnlyArgs():
+    
+    def testSequenceOnlyArgs(self):
         script = WindowsScript("monScript", "boum.sh", "arg1", "arg2")
         r_str = script.toExecutableString()
 
-        assert r_str == "cmd /C boum.sh arg1 arg2", "Problem with " + r_str
+        self.assertEqual("cmd /C boum.sh arg1 arg2", r_str)
         print(r_str)
 
-    @staticmethod
-    def testDictionnaryOnlyArgs():
+    def testDictionnaryOnlyArgs(self):
         script = WindowsScript("monScript", "boum.sh", arg1="a", arg2="b")
         r_str = script.toExecutableString()
 
-        assert r_str == "cmd /C boum.sh -arg1=a -arg2=b", "Problem with " + r_str
+        self.assertEqual("cmd /C boum.sh -arg1=a -arg2=b", r_str)
         print(r_str)
 
-    @staticmethod
-    def testCompleteArgs():
+    def testCompleteArgs(self):
         script = WindowsScript("monScript", "boum.sh", "arg1", "arg2", arg3="a", arg4="b")
         r_str = script.toExecutableString()
 
-        assert r_str == "cmd /C boum.sh arg1 arg2 -arg3=a -arg4=b", "Problem with " + r_str
+        self.assertEqual("cmd /C boum.sh arg1 arg2 -arg3=a -arg4=b", r_str)
         print(r_str)
 
-    @staticmethod
-    def testEmptyScript():
+    def testEmptyScript(self):
         script = WindowsScript("empty", "boum.sh")
         r_str = script.toExecutableString()
 
-        assert r_str == "cmd /C boum.sh", "Script not empty"
+        self.assertEqual("cmd /C boum.sh", r_str)
         print(r_str)
 
-    @staticmethod
-    def testAddArguments():
+    def testAddArguments(self):
         script = WindowsScript("monScript", "boum.sh")
         script.addArg("arg1")
         script.addArg("a", "arg2")
         r_str = script.toExecutableString()
 
-        assert r_str == "cmd /C boum.sh arg1 -arg2=a", "Problem with " + r_str
+        self.assertEqual("cmd /C boum.sh arg1 -arg2=a", r_str)
         print(r_str)
 
 
@@ -106,7 +97,7 @@ class JsonDAOTest(unittest.TestCase):
         script = dao.getScript("monScript")
         r_str = script.toExecutableString()
 
-        assert r_str == "cmd /C boum.sh arg1 -arg2=a", "Problem with " + r_str
+        self.assertEqual("cmd /C boum.sh arg1 -arg2=a", r_str)
         print("Loaded script: ", script)
 
     def testGetAllWindowsScript(self):
@@ -114,14 +105,14 @@ class JsonDAOTest(unittest.TestCase):
         scripts = dao.getScripts()
         for script in scripts:
             r_str = script.toExecutableString()
-            assert r_str
+            self.assertIsNotNone(r_str)
             print("Loaded script: ", script)
 
     def testSaveScript(self):
         script = WindowsScript("savedScript", "boum.sh", "args1", arg2="b")
         dao = JsonWindowsScriptDAO(**self.parameters)
 
-        assert dao.saveScript(script) is True, "Script not saved"
+        self.assertTrue(dao.saveScript(script))
         print("Script saved")
 
 
@@ -133,20 +124,20 @@ class ScriptServiceTest(unittest.TestCase):
 
     def runTest(self):
         service = self.factory.service
-        assert service is not None, "service is None"
+        self.assertIsNotNone(service)
         print(service)
 
         script = service.getScript("monScript")
-        assert script is not None, "script is None"
+        self.assertIsNotNone(script)
         print(script)
 
         scripts = service.getScripts()
-        assert scripts
+        self.assertIsNotNone(scripts)
         for key, value in scripts.items():
             print(key, ": ", value)
 
-        assert service.saveScript(script, "json") is True, "Script not saved"
+        self.assertTrue(service.saveScript(script, "json"))
         print("Script saved")
 
-        assert service.saveScript(script) is True, "Script without ns not saved"
+        self.assertTrue(service.saveScript(script))
         print("Script saved")
