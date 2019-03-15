@@ -145,8 +145,13 @@ class JsonWindowsScriptDAO:
             self.encoding = parameters["encoding"]
 
         self.messages = None
-        with open(self.fileName) as f:
-            self.messages = json.load(f, encoding=self.encoding)
+        with open(self.fileName, encoding=self.encoding) as fp:
+            if fp is not None:
+                content = fp.read()
+                if len(content) > 0:
+                    self.messages = json.loads(content)
+                else:
+                    self.messages = {}
 
     def getScript(self, name):
         """
@@ -206,8 +211,8 @@ class JsonWindowsScriptDAO:
             args.setdefault("args", script.args)
         self.messages.setdefault(script.name, args)
 
-        with open(self.fileName, "w") as f:
-            json.dump(self.messages, f, indent=4, encoding=self.encoding)
+        with open(self.fileName, "w", encoding=self.encoding) as f:
+            json.dump(self.messages, f, indent=4)
 
         return True
 
@@ -221,8 +226,8 @@ class JsonWindowsScriptDAO:
             return
 
         del self.messages[script.name]
-        with open(self.fileName, "w") as f:
-            json.dump(self.messages, f, indent=4, encoding=self.encoding)
+        with open(self.fileName, "w", encoding=self.encoding) as f:
+            json.dump(self.messages, f, indent=4)
 
 
 class ScriptService:

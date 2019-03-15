@@ -1,1 +1,1 @@
-__all__ = ["ScriptTest"]
+__all__ = ["script_test.py"]

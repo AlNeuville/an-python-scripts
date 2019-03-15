@@ -20,7 +20,7 @@ from sys import argv, exit
 
 from wx import App
 
-from Controller import Controller
+from controller import Controller
 
 
 VERSION = u"0.1.0"
