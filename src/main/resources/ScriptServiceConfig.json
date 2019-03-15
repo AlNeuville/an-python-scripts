@@ -1,0 +1,15 @@
+{
+    "model" : {
+        "className" : "Main.Script.ScriptService",
+        "daos" : [
+            {
+                "className" : "Main.Script.JsonWindowsScriptDAO",
+                "namespace" : "json",
+                "fileName" : "resources/Scripts.json",
+                "encoding" : "utf8"
+            }
+        ]
+    },
+    "icon" : "resources/icone.ico",
+    "autoQuit" : true
+}

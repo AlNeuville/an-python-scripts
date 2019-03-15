@@ -1,0 +1,11 @@
+{
+    "Test1": {
+        "executable": "C:\\Workspace\\Eclipse\\an.python.scripts\\src\\Main\\resources\\scripts\\test1.bat"
+    }, 
+    "Test2": {
+        "executable": "C:\\Workspace\\Eclipse\\an.python.scripts\\src\\Main\\resources\\scripts\\test2.bat", 
+        "args": [
+            "11"
+        ]
+    }
+}
