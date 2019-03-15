@@ -9,7 +9,7 @@ Created on 20 juin 2012
 
 import unittest
 import json
-from Script import Script, WindowsScript, JsonWindowsScriptDAO, ScriptServiceFactory
+from script import Script, WindowsScript, JsonWindowsScriptDAO, ScriptServiceFactory
 
 
 class ScriptTest(unittest.TestCase):
