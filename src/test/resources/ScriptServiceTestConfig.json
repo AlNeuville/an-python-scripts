@@ -1,0 +1,10 @@
+{
+    "className":"Main.Script.ScriptService",
+    "daos":[
+        {
+            "className":"Main.Script.JsonWindowsScriptDAO",
+            "namespace":"json",
+            "fileName":"resources/ScriptTest.json"
+        }
+    ]
+}
