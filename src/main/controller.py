@@ -7,7 +7,7 @@ Created on 21 juin 2012
 @author: Alexandre Neuville
 """
 
-from Queue import PriorityQueue
+from queue import PriorityQueue
 from subprocess import Popen, PIPE, STDOUT, STARTUPINFO, STARTF_USESHOWWINDOW
 from threading import Thread, Lock
 import os
