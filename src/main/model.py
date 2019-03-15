@@ -9,7 +9,7 @@ Created on 26 juin 2012
 
 from wx.lib.pubsub.pub import getDefaultPublisher
 
-from Script import ScriptServiceFactory, WindowsScript
+from script import ScriptServiceFactory, WindowsScript
 
 
 class Model:
