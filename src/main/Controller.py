@@ -287,13 +287,13 @@ class ParallelScriptExecutor(Thread):
                             self.callable(line.decode("cp850"))
 
                     self.callable(u"\nFin de l'exécution de " + msg.name)
-            except Exception, e:
+            except Exception as e:
                 if self.callable:
                     self.callable(str(e).decode("cp1252"))
                     if exec_obj and exec_obj.poll() is not None:
                         exec_obj.kill()
                 else:
-                    print str(e).decode("cp1252")
+                    print(str(e).decode("cp1252"))
             finally:
                 if self.callable:
                     self.callable(u"----------------------\n")

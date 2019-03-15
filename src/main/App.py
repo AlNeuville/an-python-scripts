@@ -33,21 +33,20 @@ if __name__ == "__main__":
     options = getopt(argv[1:], "hf:", ["help", "cfg="])
     for option, value in options[0]:
         if option == "-h" or option == "--help":
-            print __doc__
+            print(__doc__)
             exit(0)
         elif option == "-v" or option == "--version":
-            print VERSION
+            print(VERSION)
             exit(0)
         elif option == "-f" or option == "--cfg":
             configFileName = value
         elif option == "-e" or option == "--encoding":
             encoding = value
 
-    parameters = None
-    with open(configFileName) as f:
-        parameters = load(f, encoding)
+    with open(configFileName, encoding) as f:
+        parameters = load(f)
     if not parameters:
-        print "Configuration not read"
+        print("Configuration not read")
         exit(1)
 
     app = App(False)
