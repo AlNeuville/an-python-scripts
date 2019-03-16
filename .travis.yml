@@ -18,6 +18,5 @@ jobs:
           tags: true
 
 stages:
-  - test
   - packaging
   - deploy
