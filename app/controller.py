@@ -1,8 +1,8 @@
 import subprocess
 from threading import Thread
 
-from gui import CommandLinePrompt
-from model import ScriptFactory
+from app.gui import CommandLinePrompt
+from app.model import ScriptFactory
 
 
 class MainWindowController:

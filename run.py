@@ -9,8 +9,8 @@ their outputs.
 from argparse import ArgumentParser
 from tkinter import Tk
 
-from controller import MainWindowController
-from gui import MainWindow
+from app.controller import MainWindowController
+from app.gui import MainWindow
 
 if __name__ == "__main__":
 	parser = ArgumentParser(prog="Script Manager", description="Manage different console scripts.")
