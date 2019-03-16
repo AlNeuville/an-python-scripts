@@ -1,7 +1,5 @@
 language: python
 python:
-  - "3.5"
-  - "3.6-dev"
   - "3.7-dev"
 
 install: true
@@ -10,7 +8,6 @@ jobs:
   include:
     - script: python -m unittest discover -s tests -p test_*.py
     - stage: deploy
-      python: "3.7-dev"
       script: python setup.py sdist
       deploy:
         provider: releases
