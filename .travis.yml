@@ -2,21 +2,13 @@ language: python
 python:
   - "3.7-dev"
 
-jobs:
-  include:
-    - stage: test
-      script: pytest
-    - stage: packaging
-      script: python setup.py sdist
-    - stage: deploy
-      deploy:
-        provider: releases
-        api_key: $GITHUB_OAUTH_TOKEN
-        file: dist/an-python-scripts-0.1.0.tar.gz
-        skip_cleanup: true
-        on:
-          tags: true
+script:
+  - python setup.py sdist
 
-stages:
-  - packaging
-  - deploy
+deploy:
+  provider: releases
+  api_key: ${GITHUB_OAUTH_TOKEN}
+  file: dist/an-python-scripts-0.1.0.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
