@@ -1,3 +1,5 @@
+from tkinter import StringVar
+
 from gui import CommandLinePrompt
 from model import ScriptFactory
 
@@ -7,23 +9,28 @@ class MainWindowController:
 		if scripts is None:
 			scripts = dict()
 
-		self.scripts = scripts
 		self.root = root
 		self.view = view
+		self.scripts = scripts
 
 		self.view.initialize(self)
+
+		for script_name, script in self.scripts:
+			self.view.insert_script(script_name)
 
 	def on_add(self):
 		response_view = CommandLinePrompt(self.view)
 		response_controller = CommandLineEntryController(response_view)
-		response_view.mainloop()
+		self.view.wait_window(response_view)
 
-		script = ScriptFactory.create_script(response_controller.script_name, response_controller.command_line)
-		self.scripts[script.name] = script
-		self.view.add_script(script.name)
+		if not response_controller.canceled:
+			script = ScriptFactory.create_script(
+				response_controller.script_name, response_controller.command_line)
+			self.scripts[script.name] = script
+			self.view.insert_script(script.name)
 
 	def on_remove(self):
-		scripts_names = self.view.remove_scripts()
+		scripts_names = self.view.delete_selected_scripts()
 		for name in scripts_names:
 			del self.scripts[name]
 
@@ -36,12 +43,14 @@ class MainWindowController:
 
 class CommandLineEntryController:
 	def __init__(self, view):
+		self.canceled = False
 		self.script_name = None
 		self.command_line = None
 		self.view = view
 		self.view.initialize(self)
 
 	def on_cancel(self):
+		self.canceled = True
 		self.view.destroy()
 
 	def on_ok(self):

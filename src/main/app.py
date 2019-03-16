@@ -17,7 +17,7 @@ VERSION = u"0.1.0"
 
 if __name__ == "__main__":
 
-	parser = ArgumentParser()
+	parser = ArgumentParser(prog="Script Manager", description="Manage different console scripts.")
 	parser.add_argument(
 		'-e', '--encoding', type=str, help='Encoding of the configuration file', default='utf-8', dest='encoding')
 	parser.add_argument('-v', '--version', help='Print the version', action='store_true')
@@ -30,7 +30,7 @@ if __name__ == "__main__":
 		exit(0)
 
 	root = Tk()
-	root.title("Script Management")
+	root.title("Script Manager")
 	application = MainWindow(master=root)
 	controller = MainWindowController(root, application)
 	application.mainloop()

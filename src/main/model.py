@@ -9,15 +9,18 @@ class Script:
 		return ' '.join(command)
 
 	def __str__(self):
-		return "Script{name=" + self.name + ",application=" + self.application + ",arguments=" + str(
-			self.arguments) + "}"
+		return "Script{{name={name},application={application},arguments={arguments}}}".format(
+			name=self.name, application=self.application, arguments=str(self.arguments))
 
 
 class ScriptFactory:
 	@staticmethod
 	def create_script(name, command_line):
-		parts = command_line.split(' ')
 		script = Script(name)
-		script.application = parts[0]
-		script.arguments = parts[1:]
+
+		if command_line is not None:
+			parts = command_line.split(' ')
+			script.application = parts[0]
+			script.arguments = parts[1:]
+
 		return script
