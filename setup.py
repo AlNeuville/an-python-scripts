@@ -8,7 +8,7 @@ setup(
 	url='https://github.com/Sorondare/an-python-scripts',
 	author='',
 	author_email='',
-	license='license.txt',
+	license='GNU GENERAL PUBLIC LICENSE Version 3',
 	description='Program to expose output of a list of console commands',
 	data_files=[('config', ['resources/config.ini'])]
 )
