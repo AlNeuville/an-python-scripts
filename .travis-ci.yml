@@ -4,6 +4,7 @@ python:
 
 script:
   - pytest
+  - python setup.py sdist
 
 deploy:
   provider: releases
