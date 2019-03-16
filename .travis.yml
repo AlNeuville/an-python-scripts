@@ -1,16 +1,13 @@
 language: python
 python:
-  - "3.5"
-  - "3.6-dev"
   - "3.7-dev"
+
+install: true
 
 jobs:
   include:
-    - install: true
-      script: python -m unittest discover -s tests -p test_*.py
-    - stage: packaging
-      python: "3.7-dev"
-      install: true
+    - script: python -m unittest discover -s tests -p test_*.py
+    - stage: deploy
       script: python setup.py sdist
       deploy:
         provider: releases
@@ -23,5 +20,5 @@ jobs:
 
 stages:
   - test
-  - name : packaging
+  - name : deploy
     if: branch = master
