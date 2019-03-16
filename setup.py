@@ -3,11 +3,10 @@ from setuptools import setup
 setup(
 	name='an-python-scripts',
 	version='0.1.0',
-	packages=[''],
-	package_dir={'': 'src/main'},
+	packages=['app'],
 	url='',
-	license='MIT',
+	license='license.txt',
 	author='Sorondare',
 	author_email='',
-	description='Program to manage output of console command'
+	description='Program to expose output of a list of console commands'
 )
