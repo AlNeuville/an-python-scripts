@@ -1,6 +1,4 @@
-import subprocess
-from threading import Thread
-
+from app.execution import ExecutionManager
 from app.gui import CommandLinePrompt
 from app.model import ScriptFactory
 
@@ -13,7 +11,8 @@ class MainWindowController:
 		self.root = root
 		self.view = view
 		self.scripts = scripts
-		self.executors = []
+		self.execution_manager = ExecutionManager()
+		self.execution_manager.start()
 
 		self.view.initialize(self)
 
@@ -41,16 +40,14 @@ class MainWindowController:
 		script_names = self.view.get_selected_script_names()
 		scripts = [self.scripts[name] for name in script_names]
 		for script in scripts:
-			executor = Executor(script, self.display_result)
-			executor.start()
-			self.executors.append(executor)
+			self.execution_manager.add_execution(script, self.display_result)
 
 	def display_result(self, result):
 		self.view.display_script_result(result)
 
 	def on_exit(self):
-		for executor in self.executors:
-			executor.terminate()
+		self.execution_manager.stop()
+		self.execution_manager.join()
 		self.root.destroy()
 
 
@@ -70,26 +67,3 @@ class CommandLineEntryController:
 		self.script_name = self.view.script_name.get()
 		self.command_line = self.view.command_line.get()
 		self.view.destroy()
-
-
-class Executor(Thread):
-	def __init__(self, script, callback):
-		super().__init__()
-		self.args = [script.application] + script.arguments
-		self.callback = callback
-		self.process = None
-		self.daemon = True
-
-	def run(self):
-		self.callback("Launch '" + ' '.join(self.args) + "'\n")
-		self.process = subprocess.Popen(self.args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-		while True:
-			output = self.process.stdout.readline()
-			if output == '' and self.process.poll() is not None:
-				break
-			if output:
-				self.callback(output)
-		self.callback("\n")
-
-	def terminate(self):
-		self.process.terminate()

@@ -17,7 +17,6 @@ class TestMainWindowController(TestCase):
 		self.assertEqual(self.mocked_tk, self.controller.root)
 		self.assertEqual(self.mocked_view, self.controller.view)
 		self.assertDictEqual({}, self.controller.scripts)
-		self.assertSequenceEqual([], self.controller.executors)
 
 	def test_exit(self):
 		self.controller.on_exit()
