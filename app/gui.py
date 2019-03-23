@@ -1,5 +1,5 @@
 from tkinter import Frame, Button, RIGHT, LEFT, BOTTOM, TOP, LabelFrame, BOTH, Listbox, Text, X, Y, Toplevel, \
-	Entry, END, StringVar, SINGLE
+	Entry, END, StringVar, SINGLE, Scrollbar
 
 
 class MainWindow(Frame):
@@ -27,7 +27,10 @@ class MainWindow(Frame):
 		console_panel.pack(side=RIGHT, expand=True, fill=BOTH, padx=5, pady=5)
 
 		self.console = Text(console_panel, bg="black", fg="white")
-		self.console.pack(expand=True, fill=BOTH, padx=5, pady=5)
+		self.console.pack(side=LEFT, expand=True, fill=BOTH, padx=5, pady=5)
+		scrollbar = Scrollbar(console_panel, command=self.console.yview)
+		scrollbar.pack(side=RIGHT, fill=Y)
+		self.console.configure(yscrollcommand=scrollbar.set)
 
 		bottom_panel = Frame(self)
 		bottom_panel.pack(side=BOTTOM, expand=True, fill=X)
