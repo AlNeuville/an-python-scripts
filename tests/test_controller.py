@@ -13,6 +13,11 @@ class TestMainWindowController(TestCase):
 		self.mocked_view = MagicMock(MainWindow)
 		self.controller = MainWindowController(self.mocked_tk, self.mocked_view)
 
+	def tearDown(self):
+		if self.controller.execution_manager.is_alive():
+			self.controller.execution_manager.stop()
+			self.controller.execution_manager.join()
+
 	def test_init_creation(self):
 		self.assertEqual(self.mocked_tk, self.controller.root)
 		self.assertEqual(self.mocked_view, self.controller.view)
