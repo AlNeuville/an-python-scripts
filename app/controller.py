@@ -46,8 +46,9 @@ class MainWindowController:
 		self.view.display_script_result(result)
 
 	def on_exit(self):
-		self.execution_manager.stop()
-		self.execution_manager.join()
+		if self.execution_manager.is_alive():
+			self.execution_manager.stop()
+			self.execution_manager.join()
 		self.root.destroy()
 
 

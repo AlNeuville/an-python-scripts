@@ -3,6 +3,27 @@ from queue import Queue, Empty
 from threading import Thread, Event
 
 
+class Executor(Thread):
+	def __init__(self, script, callback):
+		super().__init__()
+		self.args = [script.application] + script.arguments
+		self.callback = callback
+		self.daemon = True
+
+	def run(self):
+		self.callback("Launch '" + ' '.join(self.args) + "'\n")
+		# noinspection PyArgumentList
+		with subprocess.Popen(
+				self.args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, text=True) as process:
+			while True:
+				line = process.stdout.readline()
+				if not line:
+					break
+				else:
+					self.callback(line)
+		self.callback("\n")
+
+
 class ExecutionManager(Thread):
 	def __init__(self):
 		super().__init__()
@@ -19,16 +40,8 @@ class ExecutionManager(Thread):
 		while not self._stop_event.is_set():
 			try:
 				script, callback = self._queue.get(timeout=0.5)
-				args = [script.application] + script.arguments
-
-				callback("Launch '" + ' '.join(args) + "'\n")
-				process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-				while True:
-					output = process.stdout.readline()
-					if output == '' and process.poll() is not None:
-						break
-					if output:
-						callback(output)
-				callback("\n")
+				executor = Executor(script, callback)
+				executor.start()
+				executor.join()
 			except Empty:
 				pass
