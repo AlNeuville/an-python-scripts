@@ -17,20 +17,33 @@ class MainWindow(Frame):
 		script_panel = LabelFrame(main_panel, text="Scripts")
 		script_panel.pack(side=LEFT, expand=True, fill=Y, padx=5, pady=5)
 
-		self.listbox = Listbox(script_panel, selectmode=SINGLE)
-		self.listbox.pack(side=TOP, expand=True, fill=BOTH, padx=5, pady=5)
-		Button(script_panel, text="Exécuter", command=controller.on_execute).pack(side=BOTTOM, padx=5, pady=5)
-		Button(script_panel, text="Supprimer", command=controller.on_remove).pack(side=BOTTOM, padx=5, pady=5)
-		Button(script_panel, text="Ajouter", command=controller.on_add).pack(side=BOTTOM, padx=5, pady=5)
+		listbox_panel = Frame(script_panel)
+		listbox_panel.pack(side=TOP, fill=BOTH, expand=True)
+
+		self.listbox = Listbox(listbox_panel, selectmode=SINGLE)
+		self.listbox.pack(side=LEFT, expand=True, fill=BOTH, padx=5, pady=5)
+		listbox_scrollbar = Scrollbar(listbox_panel, command=self.listbox.yview)
+		listbox_scrollbar.pack(side=RIGHT, fill=Y, pady=5)
+		self.listbox.configure(yscrollcommand=listbox_scrollbar.set)
+
+		button_size = 9
+		button_panel = Frame(script_panel)
+		button_panel.pack(side=BOTTOM, fill=X)
+		Button(button_panel, text="Ajouter", command=controller.on_add, width=button_size).grid(
+			row=0, column=0, padx=5)
+		Button(button_panel, text="Supprimer", command=controller.on_remove, width=button_size).grid(
+			row=0, column=1, padx=5)
+		Button(button_panel, text="Exécuter", command=controller.on_execute, width=button_size).grid(
+			row=1, column=0, padx=5, pady=5)
 
 		console_panel = LabelFrame(main_panel, text="Console")
 		console_panel.pack(side=RIGHT, expand=True, fill=BOTH, padx=5, pady=5)
 
 		self.console = Text(console_panel, bg="black", fg="white")
 		self.console.pack(side=LEFT, expand=True, fill=BOTH, padx=5, pady=5)
-		scrollbar = Scrollbar(console_panel, command=self.console.yview)
-		scrollbar.pack(side=RIGHT, fill=Y)
-		self.console.configure(yscrollcommand=scrollbar.set)
+		console_scrollbar = Scrollbar(console_panel, command=self.console.yview)
+		console_scrollbar.pack(side=RIGHT, fill=Y)
+		self.console.configure(yscrollcommand=console_scrollbar.set)
 
 		bottom_panel = Frame(self)
 		bottom_panel.pack(side=BOTTOM, expand=True, fill=X)
